@@ -1,0 +1,217 @@
+<!-- Topbar -->
+<div class="container-fluid bg-light d-none d-lg-block">
+    <div class="row py-2 px-lg-5">
+        <div class="col-lg-6 text-left mb-2 mb-lg-0">
+            <div class="d-inline-flex align-items-center">
+                <a class="btn btn-primary px-3 mr-2" href="adoption.php" role="button">Adoptă un animal</a>
+                <a class="btn btn-secondary px-3" href="rehome.html" role="button">Relochează un animal</a>
+                <a href="dbmanager.php" class="nav-item nav-link px-4">Admin</a>
+            </div>
+        </div>
+        <div class="col-lg-6 text-right">
+            <div class="d-inline-flex align-items-center">
+                <a class="text-primary px-2 py-2" id="clock"></a>
+                <a class="text-primary px-2 py-2" href="https://www.facebook.com/profile.php?id=100009294300385">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a class="text-primary px-2 py-2" href="https://twitter.com/akko_qq">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="text-primary px-2 py-2" href="https://www.linkedin.com/in/mihai-gabriel-serban-857ab6286/">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a class="text-primary px-2 py-2" href="https://www.instagram.com/akko.qq/">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a class="text-primary pl-2 py-2" href="https://www.youtube.com/channel/UCADNnF_prTj2btA4bmovTgg">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+        <a href="index.php" class="navbar-brand ml-lg-3">
+            <h1 class="m-0 text-primary"><span class="text-dark">Adăpost</span> <span class="text-green"> de</span> Animale</h1>
+        </a>
+        <img src="img/cute doggie ghost.png" width="60" height="60">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+            <div class="navbar-nav m-auto py-0">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle px-4" data-toggle="dropdown">Adoptă un animal</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="adoption.php?filter=dogs" class="dropdown-item">Adoptă un câine</a>
+                        <a href="adoption.php?filter=cats" class="dropdown-item">Adoptă o pisică</a>
+                        <a href="adoption.php?filter=small_animals" class="dropdown-item">Adoptă un animal mic</a>
+                    </div>
+                </div>
+                <a id="shopButton" href="javascript:void(0);" class="nav-item nav-link px-4 disabled" onclick="redirectToQuiz()">Quiz</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle px-4" data-toggle="dropdown">Ghiduri</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="dog_adoption_guide.html" class="dropdown-item">Cum să adopți un câine?</a>
+                        <a href="cat_adoption_guide.html" class="dropdown-item">Cum să adopți o pisică?</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle px-4" data-toggle="dropdown">Sfaturi</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="advice.html" class="dropdown-item">Sfaturi înainte de adopție</a>
+                        <a href="behaviour.html" class="dropdown-item">Comportamentul Animalelor</a>
+                        <a href="insurance.html" class="dropdown-item">Asigurare pentru animale</a>
+                        <a href="happy_past.html" class="dropdown-item">Animale Relocate</a>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void(0);" class="btn btn-primary d-none d-lg-block" onclick="openLoginForm()">Logare</a>
+            <a class="nav-link"> </a>
+            <a href="javascript:void(0);" class="btn btn-primary d-none d-lg-block" onclick="openAccountForm()">Creează Cont</a>
+        </div>
+    </nav>
+</div>
+
+<!-- JavaScript functions for the navbar -->
+<script>
+    function openResetPasswordForm() {
+        document.getElementById('resetPasswordForm').style.display = 'block';
+    }
+
+    function closeResetPasswordForm() {
+        document.getElementById('resetPasswordForm').style.display = 'none';
+    }
+
+    function handlePasswordReset(event) {
+        event.preventDefault();
+
+        const form = document.getElementById('resetForm');
+        const formData = new FormData(form);
+
+        fetch('send_reset_email_public.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAlert(data.message, 'success');
+                    closeResetPasswordForm();
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function showAlert(message, type) {
+        const alertBox = document.createElement('div');
+        alertBox.className = `alert alert-${type}`;
+        alertBox.textContent = message;
+
+        document.body.appendChild(alertBox);
+
+        setTimeout(() => {
+            alertBox.remove();
+        }, 3000);
+    }
+
+    function openLoginForm() {
+        document.getElementById('loginForm').style.display = 'block';
+    }
+
+    function closeLoginForm() {
+        document.getElementById('loginForm').style.display = 'none';
+    }
+
+    function handleLogin(event) {
+        event.preventDefault();
+
+        const form = document.getElementById('loginFormElement');
+        const formData = new FormData(form);
+
+        fetch('login.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showAlert(data.message, 'success');
+                closeLoginForm();
+                document.getElementById('shopButton').classList.remove('disabled');
+                document.getElementById('shopButton').href = 'quiz.php';
+            } else {
+                showAlert(data.message, 'error');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function openAccountForm() {
+        document.getElementById('createAccountForm').style.display = 'block';
+    }
+
+    function closeAccountForm() {
+        document.getElementById('createAccountForm').style.display = 'none';
+    }
+
+    function handleAccountCreation(event) {
+        event.preventDefault();
+
+        const password = document.getElementById('account_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        if (password !== confirmPassword) {
+            alert('Parolele nu se potrivesc!');
+            return false;
+        }
+
+        const form = document.getElementById('accountForm');
+        const formData = new FormData(form);
+
+        fetch('create_account.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAlert(data.message, 'success');
+                    closeAccountForm();
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function handleNewsletterSignup(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = document.getElementById('newsletterForm');
+        const formData = new FormData(form);
+
+        fetch('newsletter_signup.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAlert(data.message, 'success');
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function redirectToQuiz() {
+        window.location.href = 'quiz.php';
+    }
+</script>
